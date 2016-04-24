@@ -42,24 +42,24 @@ bool tree::add(item theItem) {
 					//reject the item if the same item information is already in the tree
 			else if (newPointer->ID.compare(currentPointer->ID) == 0) return false;
 
-					//branch to left if the new node is less than current node
+					//branch to right if the new node is less than current node
 			else if (newPointer->ID.compare(currentPointer->ID) < 0) {
 						
 						//extend branch from the free side
-				if (currentPointer->left != NULL) currentPointer = currentPointer->left;
+				if (currentPointer->right != NULL) currentPointer = currentPointer->right;
 				else {
-					currentPointer->left = newPointer;
+					currentPointer->right = newPointer;
 					inserted = true;
 				}
 			}
 
-					//branch to right side if the new node is higher than current one
+					//branch to left side if the new node is higher than current one
 			else {
 
 						//extend the branch from the free side
-				if (currentPointer->right != NULL) currentPointer = currentPointer->right;
+				if (currentPointer->left != NULL) currentPointer = currentPointer->left;
 				else {
-					currentPointer->right = newPointer;
+					currentPointer->left = newPointer;
 					inserted = true;
 				}
 			}
@@ -76,8 +76,8 @@ void tree::patchParent(item *newParent, item *parent, item *toDel) {
 		// Returns - Nothing
 
 	if (parent == NULL)	root = newParent;
-	else if (parent->left == toDel) parent->left = newParent;
-	else parent->right = newParent;
+	else if (parent->right == toDel) parent->right = newParent;
+	else parent->left = newParent;
 
 	return;
 }
@@ -106,8 +106,8 @@ bool tree::del(item theItem) {
 				//search the whole tree until it is found or till ends
 		else {
 			parent = toDel;
-			if (theItem.ID.compare(toDel->ID) < 0) toDel = toDel->left;
-			else toDel = toDel->right;
+			if (theItem.ID.compare(toDel->ID) < 0) toDel = toDel->right;
+			else toDel = toDel->left;
 		}
 	}
 
@@ -118,40 +118,40 @@ bool tree::del(item theItem) {
 
 			//delete the node if exists
 	else {
-		if (toDel->left == NULL) {
+		if (toDel->right == NULL) {
 
 					//turn back if the node has no child (Case-2)
-			if (toDel->right == NULL) patchParent(NULL, parent, toDel);
+			if (toDel->left == NULL) patchParent(NULL, parent, toDel);
 
-					//follow right if the node has only right child (Case-3)
-			else patchParent(toDel->right, parent, toDel);
+					//follow left if the node has only left child (Case-3)
+			else patchParent(toDel->left, parent, toDel);
 		}
 		else {
-					//follow left if the node has only left child (Case-4)
-			if (toDel->right == NULL) patchParent(toDel->left, parent, toDel);
+					//follow right if the node has only right child (Case-4)
+			if (toDel->left == NULL) patchParent(toDel->right, parent, toDel);
 
 					//do swapping and replacing jobs when the node has both children (Case-5)
 			else {
-						//maintain the left child
+						//maintain the right child
 				node1 = toDel;
-				node2 = toDel->left;
-				node3 = node2->right;
+				node2 = toDel->right;
+				node3 = node2->left;
 
 						//search the appropiate place to replace
 				while (node3 != NULL) {
 					node1 = node2;
 					node2 = node3;
-					node3 = node3->right;
+					node3 = node3->left;
 				}
 
 						//delete the node if it is the one
 				if (node1 != toDel) {
-					node1->right = node2->left;
-					node2->left = toDel->left;
+					node1->left = node2->right;
+					node2->right = toDel->right;
 				}
 
-						//maintain the right child
-				node2->right = toDel->right;
+						//maintain the left child
+				node2->left = toDel->left;
 				patchParent(node2, parent, toDel);
 			}
 		}
@@ -239,8 +239,8 @@ item * tree::search(item theItem) {
 
 				//keep searching till found or the end
 		else {
-			if (theItem.ID.compare(current->ID) < 0) current = current->left;
-			else current = current->right;
+			if (theItem.ID.compare(current->ID) < 0) current = current->right;
+			else current = current->left;
 		}
 	}
 

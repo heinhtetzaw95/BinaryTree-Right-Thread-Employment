@@ -30,7 +30,7 @@ static bool traverseTree(item *current) {
 		// Returns - Whether or not the received node is valid
 
 	if (current != NULL) {
-		traverseTree(current->left);
+		traverseTree(current->right);
 
 		output << "   "
 			<< setw(11) << left << current->ID
@@ -38,7 +38,7 @@ static bool traverseTree(item *current) {
 			<< setw(6) << right << current->onHand
 			<< setw(11) << right << current->onOrder << endl;
 		
-		traverseTree(current->right);
+		traverseTree(current->left);
 	}
 	else return false;
 	return true;
@@ -199,7 +199,7 @@ static void header() {
 	output << setw(15) << "CSC 36000";
 	output << setw(15) << "Section 11" << endl;
 	output << setw(37) << "Spring 2016";
-	output << setw(20) << "Assignment #7" << endl;
+	output << setw(20) << "Assignment #8" << endl;
 	output << setw(38) << "-------------------------------------------";
 	output << setw(38) << "------------------------------------------\n\n";
 
